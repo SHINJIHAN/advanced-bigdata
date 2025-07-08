@@ -1,0 +1,15 @@
+ID,Size,Manufact,Model,Mileage,Reliable,Index
+1,Small ,Chevrolet,Geo Prizm,33,5,4
+2,Small ,Honda ,Civic ,29,5,4
+3,Small ,Toyota ,Corolla ,30,5,4
+4,Small ,Ford ,Escort ,27,3,3
+5,Small ,Dodge ,Colt ,34,.,.
+6,Compact ,Ford ,Tempo ,24,1,3
+7,Compact ,Chrysler ,Le Baron ,23,3,3
+8,Compact ,Buick ,Skylark ,21,3,3
+9,Compact ,Plymouth ,Acclaim ,24,3,3
+10,Compact ,Chevrolet,Corsica ,25,2,3
+11,Compact ,Pontiac ,Sunbird ,24,1,3
+12,Mid-Sized,Toyota ,Camry ,24,5,4
+13,Mid-Sized,Honda ,Accord ,26,5,4
+14,Mid-Sized,Ford ,Taurus ,20,3,3
