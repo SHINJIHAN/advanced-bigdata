@@ -219,3 +219,64 @@ print(DummyFit1.summary())
 # %% 회귀모형에 대한 분산분석표 생성
 import statsmodels.api as sm
 sm.stats.anova_lm(DummyFit1, typ=3)
+
+
+
+# %% 9.18: 지수모형에 의한 회귀분석 - Mobile
+import os
+
+file_path = os.path.join('data', 'Mobile.csv')
+Mobile = pd.read_csv(file_path)
+Mobile.head(10)
+
+# %% 연도별 가입자 수 - 산점도
+import seaborn as sns
+sns.scatterplot(x = 'Year', y = 'Yt', data = Mobile)
+
+# %% log 변환 및 회귀분석
+import numpy as np
+import statsmodels.formula.api as smf
+Mobile["LogYt"] = np.log(Mobile["Yt"])
+MobileFit = smf.ols(formula = 'LogYt ~ T',
+                   data = Mobile).fit()
+print(MobileFit.summary())
+
+# %% 9.19: 지수모형에 예측값에 대한 그래프 작성
+Mobile["HatYt"] = 12.475*np.exp(0.594*Mobile["T"])
+Mobile[["Yt", "HatYt"]].corr()**2
+
+# %% 연도별 가입자수와 지수모형의 예측값
+import matplotlib.pyplot as plt
+sns.scatterplot(x = 'Year', y = 'Yt', data = Mobile)
+sns.lineplot(x = 'Year', y = 'HatYt', marker = "*", color = "red", data = Mobile)
+plt.show()
+
+
+
+# %% 9.20: 비선형 회귀 분석
+import scipy.optimize as opt
+def f(x, m, a, b):
+    return (m*np.exp(a+b*x))/(1+np.exp(a+b*x))
+xdata = Mobile["T"]
+ydata = Mobile["Yt"]
+(m_, a_, b_), pcov = opt.curve_fit(f, xdata, ydata)
+perr = np.sqrt(np.diag(pcov))
+print('m = {0:10.3f} +- {1:10.3f}'.format(m_, perr[0]))
+print('m = {0:10.3f} +- {1:10.3f}'.format(a_, perr[1]))
+print('m = {0:10.3f} +- {1:10.3f}'.format(b_, perr[2]))
+
+# %% 결정계수(R²) 계산
+from scipy.stats import pearsonr
+pearsonr(ydata, f(xdata, m_, a_, b_))[0]**2
+
+
+
+# %% 9.21: 로지스틱 곡선 모형의 예측값에 대한 그래프 작성
+year = np.arange(1984, 2011)
+T = year - 1983
+PredYt = f(T, m_, a_, b_)
+fig, ax = plt.subplots(1, 1, figsize = (6, 4))
+ax.plot(year, PredYt, '-')
+plt.xlim([1984, 2010])
+plt.ylim([0, 140000])
+plt.show()
